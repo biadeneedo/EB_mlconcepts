@@ -1,4 +1,7 @@
-"""Implementation of the CART algorithm to train decision tree classifiers."""
+"""Implementation of the CART algorithm to train decision tree classifiers.
+1. Si calcola il valore di gini standard in base ai dati a disposizione
+2. Si fa un ciclo lungo come la lunghezza in righe del dataset (len(y)) per trovare uno split migliore allo split standard
+"""
 # https://towardsdatascience.com/decision-tree-from-scratch-in-python-46e99dfea775
 
 import numpy as np
@@ -67,7 +70,7 @@ class DecisionTreeClassifier:
             # linear rather than quadratic.
             num_left = [0] * self.n_classes_
             num_right = num_parent.copy()
-            for i in range(1, m):  # possible split positions
+            for i in range(1, m):  # possible split positions based on the y values
                 c = classes[i - 1]
                 num_left[c] += 1
                 num_right[c] -= 1
@@ -141,45 +144,26 @@ if __name__ == "__main__":
     from sklearn.utils import Bunch
 
     parser = argparse.ArgumentParser(description="Train a decision tree.")
-    parser.add_argument("--dataset", choices=["breast", "iris", "wifi"], default="wifi")
-    parser.add_argument("--max_depth", type=int, default=1)
     parser.add_argument("--hide_details", dest="hide_details", action="store_true")
     parser.set_defaults(hide_details=False)
     parser.add_argument("--use_sklearn", dest="use_sklearn", action="store_true")
     parser.set_defaults(use_sklearn=False)
     args = parser.parse_args()
 
-    # 1. Load dataset.
-    if args.dataset == "breast":
-        dataset = load_breast_cancer()
-    elif args.dataset == "iris":
-        dataset = load_iris()
-    elif args.dataset == "wifi":
-        # https://archive.ics.uci.edu/ml/datasets/Wireless+Indoor+Localization
-        df = pd.read_csv("wifi_localization.txt", delimiter="\t")
-        data = df.to_numpy()
-        dataset = Bunch(
-            data=data[:, :-1],
-            target=data[:, -1] - 1,
-            feature_names=["Wifi {}".format(i) for i in range(1, 8)],
-            target_names=["Room {}".format(i) for i in range(1, 5)],
-        )
+
+    # 1. Import data
+    dataset = load_iris()
     X, y = dataset.data, dataset.target
 
     # 2. Fit decision tree.
     if args.use_sklearn:
-        clf = SklearnDecisionTreeClassifier(max_depth=args.max_depth)
+        clf = SklearnDecisionTreeClassifier(max_depth=10)
     else:
-        clf = DecisionTreeClassifier(max_depth=args.max_depth)
+        clf = DecisionTreeClassifier(max_depth=10)
     clf.fit(X, y)
 
     # 3. Predict.
-    if args.dataset == "iris":
-        input = [0, 0, 5.0, 1.5]
-    elif args.dataset == "wifi":
-        input = [-70, 0, 0, 0, -40, 0, 0]
-    elif args.dataset == "breast":
-        input = [np.random.rand() for _ in range(30)]
+    input = [0, 0, 5.0, 1.5]
     pred = clf.predict([input])[0]
     print("Input: {}".format(input))
     print("Prediction: " + dataset.target_names[pred])

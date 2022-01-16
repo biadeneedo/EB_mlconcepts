@@ -2,7 +2,7 @@
 Refer to this link for better explanation https://realpython.com/gradient-descent-algorithm-python/
 Step per il gradient descent:
 
-1. Definire la funzione da ottimizzare -objectve function- (funzione di costo in algoritmi di supervised)
+1. Definire la funzione da ottimizzare -objective function- (funzione di costo in algoritmi di supervised)
 2. Definire il Gradient della funzione (fare la derivata della funzione di costo)
 3. Settare dei pesi iniziali dai quali partire
 4. Inserire i pesi all'interno della funzione (valorizzazione della funzione di costo)
@@ -63,10 +63,9 @@ gradient_descent(cost_function, ssr_gradient, x, y, start=[0.5, 0.5], learn_rate
 
 
 
-# GRADIENT DESCENT FOR MULTIPLE-VARIABLE OPTIMIZATION
-# Used for linear regression algorithms y=mx+b
-# The function is the Sum of Squared Residuals SSR=Σᵢ(𝑦ᵢ − 𝑏 − m𝑥ᵢ)² /(2𝑛)
-# The gradient are: Σᵢ(𝑏 + m𝑥ᵢ − 𝑦ᵢ) *(1/𝑛)  &  Σᵢ(𝑏 + m𝑥ᵢ − 𝑦ᵢ) *𝑥ᵢ *(1/𝑛)
+# GRADIENT DESCENT FOR MULTIPLE-VARIABLE OPTIMIZATION - LINEAR REGRESSION
+# Used for this linear regression algorithms is y= m2x1+ m2x2 (+b?)
+# The function is the mean squared error (MSE)
 import numpy as np
 def gradient_descent(
     cost_function, gradient, x, y, start, learn_rate=0.1, n_iter=50, tolerance=1e-06
